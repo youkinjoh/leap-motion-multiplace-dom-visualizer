@@ -164,7 +164,9 @@
       .sphere {
         opacity: .3;
         display: none;
-        font-size: 100px;
+        height: 5em;
+        width: 5em;
+        margin-left:-2em;
       }
 
       .show-hands .sphere {
@@ -191,6 +193,12 @@
       .finger .face.bk { -webkit-transform: rotateX(90deg); }
       .finger .face.lt { -webkit-transform: rotateY(90deg) translateX(-1em); height: 3em;}
       .finger .face.rt { -webkit-transform: rotateY(90deg) translateX(-1em) translateZ(1em); height: 3em;}
+
+      .sphere .face.tp { -webkit-transform: translateZ(1em); height: 5em; width: 5em;}
+      .sphere .face.ft { -webkit-transform: rotateX(90deg) translateZ(-5em); width: 5em;}
+      .sphere .face.bk { -webkit-transform: rotateX(90deg); width: 5em; }
+      .sphere .face.lt { -webkit-transform: rotateY(90deg) translateX(-1em); height: 5em;}
+      .sphere .face.rt { -webkit-transform: rotateY(90deg) translateX(-1em) translateZ(5em); height: 5em;}
 
     </style>
   </head>
