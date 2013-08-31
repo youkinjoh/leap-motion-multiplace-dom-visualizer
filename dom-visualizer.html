@@ -84,12 +84,6 @@
             delete fingers[fingerId];
           }
         }
-        document.getElementById('showHands').addEventListener('mousedown', function() {
-          document.getElementById('app').setAttribute('class','show-hands');
-        }, false);
-        document.getElementById('hideHands').addEventListener('mousedown', function() {
-          document.getElementById('app').setAttribute('class','');
-        }, false);
       });
 
     </script>
@@ -163,14 +157,9 @@
 
       .sphere {
         opacity: .3;
-        display: none;
         height: 5em;
         width: 5em;
         margin-left:-2em;
-      }
-
-      .show-hands .sphere {
-        display: block;
       }
 
       .face {
@@ -203,9 +192,7 @@
     </style>
   </head>
   <body>
-    <div id="app" class="show-hands">
-      <button id="showHands">Show Hands</button>
-      <button id="hideHands">hide Hands</button>
+    <div id="app">
       <div id="scene">
         <div id="cube" class="cube">
           <div class="face tp"></div>
