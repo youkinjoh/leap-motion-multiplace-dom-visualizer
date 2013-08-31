@@ -12,11 +12,11 @@
         Sphere.style.webkitTransform = "translateX("+posX+"px) translateY("+posY+"px) translateZ("+posZ+"px) rotateX("+rotX+"deg) rotateY("+rotY+"deg) rotateZ("+rotZ+"deg)";
       }
 
-      function connect() {
+      function connect(options) {
 
         var fingers = {};
         var spheres = {};
-        Leap.loop(function(frame) {
+        Leap.loop(options || {}, function(frame) {
           var fingerIds = {};
           var handIds = {};
           if (frame.hands === undefined ) {
