@@ -12,7 +12,19 @@
         Sphere.style.webkitTransform = "translateZ("+posZ+"px) translateX("+posX+"px) translateY("+posY+"px) rotateZ("+rotZ+"deg) rotateX("+rotX+"deg) rotateY("+rotY+"deg)";
       }
 
+      var connectionIds = {};
+
       function connect(options) {
+
+        var connectionId;
+        while(true) {
+          connectionId = Math.floor(Math.random()*0xffffffff).toString(16);
+          if (connectionId in connectionIds) {
+          } else {
+            connectionIds[connectionId] = true;
+            break;
+          }
+        }
 
         var fingers = {};
         var spheres = {};
@@ -43,20 +55,20 @@
             var rotXX = rotX;
             var rotYY = rotY;
             var rotZZ = rotZ + degree;
-            var sphere = spheres[hand.id];
+            var sphere = spheres[connectionId+"_"+hand.id];
             if (!sphere) {
               var sphereDiv = document.getElementById("sphere").cloneNode(true);
-                  sphereDiv.setAttribute('id',hand.id);
+                  sphereDiv.setAttribute('id',connectionId+"_"+hand.id);
                   sphereDiv.style.backgroundColor='#'+Math.floor(Math.random()*16777215).toString(16);
                   document.getElementById('scene').appendChild(sphereDiv);
-                  spheres[hand.id] = hand.id;
+                  spheres[connectionId+"_"+hand.id] = connectionId+"_"+hand.id;
             } else {
-              var sphereDiv =  document.getElementById(hand.id);
+              var sphereDiv =  document.getElementById(connectionId+"_"+hand.id);
               if (typeof(sphereDiv) != 'undefined' && sphereDiv != null) {
                 moveSphere(sphereDiv, posXX, posYY, posZZ, rotXX, rotYY, rotZZ);
               }
             }
-            handIds[hand.id] = true;
+            handIds[connectionId+"_"+hand.id] = true;
           }
           for (handId in spheres) {
             if (!handIds[handId]) {
@@ -80,20 +92,20 @@
             var dirXX = dirX;
             var dirYY = dirY;
             var dirZZ = dirZ + degree;
-            var finger = fingers[pointable.id];
+            var finger = fingers[connectionId+"_"+pointable.id];
             if (!finger) {
               var fingerDiv = document.getElementById("finger").cloneNode(true);
-                  fingerDiv.setAttribute('id',pointable.id);
+                  fingerDiv.setAttribute('id',connectionId+"_"+pointable.id);
                   fingerDiv.style.backgroundColor='#'+Math.floor(Math.random()*16777215).toString(16);
                   document.getElementById('scene').appendChild(fingerDiv);
-                  fingers[pointable.id] = pointable.id;
+                  fingers[connectionId+"_"+pointable.id] = connectionId+"_"+pointable.id;
             } else {
-              var fingerDiv =  document.getElementById(pointable.id);
+              var fingerDiv =  document.getElementById(connectionId+"_"+pointable.id);
               if (typeof(fingerDiv) != 'undefined' && fingerDiv != null) {
                 moveFinger(fingerDiv, posXX, posYY, posZZ, dirXX, dirYY, dirZZ);
               }
             }
-            fingerIds[pointable.id] = true;
+            fingerIds[connectionId+"_"+pointable.id] = true;
           }
           for (fingerId in fingers) {
             if (!fingerIds[fingerId]) {
@@ -108,13 +120,42 @@
 
       connect();
 
+      function initialize() {
+        document.getElementById("connect").addEventListener("click", function() {
+          var host     = document.getElementById("leaphost").value;
+          var port     = document.getElementById("leapport").value;
+          var rotation = document.getElementById("rotation").value;
+          var options = {};
+          if (host) {
+            options.host = host;
+          }
+          if (port) {
+            options.port = port;
+          }
+          if (rotation) {
+            options.rotation = parseInt(rotation, 10);
+          }
+          connect(options);
+        }, false);
+      }
+
+      window.addEventListener("load", initialize, false)
+
     </script>
     <style>
-      *,*:before,*:after {
+      html,body,#app *,#app *:before,#app *:after {
         margin: 0;
         padding: 0;
         border: 0;
         -webkit-box-sizing: border-box;
+      }
+      #nav {
+        position: absolute;
+        z-index: 2;
+      }
+      #nav input {
+        width: 160px;
+        display: block;
       }
       #app {
         position: absolute;
@@ -211,6 +252,12 @@
     </style>
   </head>
   <body>
+    <div id="nav">
+      <input type="text" id="leaphost" placeholder="host (default:127.0.0.1)" />
+      <input type="text" id="leapport" placeholder="port (default:6437)" />
+      <input type="text" id="rotation" placeholder="degree(0-360) (default:0)" />
+      <input type="button" id="connect" value="connect" />
+    </div>
     <div id="app">
       <div id="scene">
         <div id="cube" class="cube">
