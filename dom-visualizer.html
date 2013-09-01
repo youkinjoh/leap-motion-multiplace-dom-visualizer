@@ -38,7 +38,7 @@
             var rotY = -(hand.palmNormal[0]*90);
             var rotZ = (hand.direction[0]*90);
             var posXX = Math.cos(radian) * posX + Math.sin(-radian) * posY;
-            var posYY = Math.sin(radian) * posX + Math.cos(-radian) * posY;
+            var posYY = Math.sin(radian) * posX + Math.cos(-radian) * posY - 200;
             var posZZ = posZ - 400;
             var rotXX = rotX;
             var rotYY = rotY;
@@ -75,7 +75,7 @@
             var dirY = 0;
             var dirZ = (pointable.direction[0]*90);
             var posXX = Math.cos(radian) * posX + Math.sin(-radian) * posY;
-            var posYY = (Math.sin(radian) * posX + Math.cos(-radian) * posY);
+            var posYY = (Math.sin(radian) * posX + Math.cos(-radian) * posY) - 200;
             var posZZ = posZ - 400;
             var dirXX = dirX;
             var dirYY = dirY;
