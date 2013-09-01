@@ -5,7 +5,7 @@
     <script>
 
       function moveFinger(Finger, posX, posY, posZ, dirX, dirY, dirZ) {
-        Finger.style.webkitTransform = "translateZ("+posZ+"px) translateX("+posX+"px) translateY("+posY+"px) rotateZ("+dirZ+"deg) rotateX("+dirX+"deg) rotateY(0deg)";
+        Finger.style.webkitTransform = "translateZ("+posZ+"px) translateX("+posX+"px) translateY("+posY+"px) rotateZ("+dirZ+"deg) rotateX("+dirX+"deg) rotateY("+dirY+"deg)";
       }
 
       function moveSphere(Sphere, posX, posY, posZ, rotX, rotY, rotZ) {
@@ -16,6 +16,10 @@
 
         var fingers = {};
         var spheres = {};
+
+        var degree = (!!options && "rotation" in options) ? options.rotation : 0;
+        var radian = (2 * Math.PI) * (degree / 360);
+
         Leap.loop(options || {}, function(frame) {
           var fingerIds = {};
           var handIds = {};
@@ -29,10 +33,16 @@
             var hand = frame.hands[handId];
             var posX = (hand.palmPosition[0]*3);
             var posY = (hand.palmPosition[2]*3);
-            var posZ = (hand.palmPosition[1]*3)-400;
+            var posZ = (hand.palmPosition[1]*3);
             var rotX = -(hand.direction[1]*90);
             var rotY = -(hand.palmNormal[0]*90);
             var rotZ = (hand.direction[0]*90);
+            var posXX = Math.cos(radian) * posX + Math.sin(-radian) * posY;
+            var posYY = Math.sin(radian) * posX + Math.cos(-radian) * posY;
+            var posZZ = posZ - 400;
+            var rotXX = rotX;
+            var rotYY = rotY;
+            var rotZZ = rotZ + degree;
             var sphere = spheres[hand.id];
             if (!sphere) {
               var sphereDiv = document.getElementById("sphere").cloneNode(true);
@@ -43,7 +53,7 @@
             } else {
               var sphereDiv =  document.getElementById(hand.id);
               if (typeof(sphereDiv) != 'undefined' && sphereDiv != null) {
-                moveSphere(sphereDiv, posX, posY, posZ, rotX, rotY, rotZ);
+                moveSphere(sphereDiv, posXX, posYY, posZZ, rotXX, rotYY, rotZZ);
               }
             }
             handIds[hand.id] = true;
@@ -60,10 +70,16 @@
             var pointable = frame.pointables[pointableId];
             var posX = (pointable.tipPosition[0]*3);
             var posY = (pointable.tipPosition[2]*3);
-            var posZ = (pointable.tipPosition[1]*3)-400;
+            var posZ = (pointable.tipPosition[1]*3);
             var dirX = -(pointable.direction[1]*90);
-            var dirY = -(pointable.direction[2]*90);
+            var dirY = 0;
             var dirZ = (pointable.direction[0]*90);
+            var posXX = Math.cos(radian) * posX + Math.sin(-radian) * posY;
+            var posYY = (Math.sin(radian) * posX + Math.cos(-radian) * posY);
+            var posZZ = posZ - 400;
+            var dirXX = dirX;
+            var dirYY = dirY;
+            var dirZZ = dirZ + degree;
             var finger = fingers[pointable.id];
             if (!finger) {
               var fingerDiv = document.getElementById("finger").cloneNode(true);
@@ -74,7 +90,7 @@
             } else {
               var fingerDiv =  document.getElementById(pointable.id);
               if (typeof(fingerDiv) != 'undefined' && fingerDiv != null) {
-                moveFinger(fingerDiv, posX, posY, posZ, dirX, dirY, dirZ);
+                moveFinger(fingerDiv, posXX, posYY, posZZ, dirXX, dirYY, dirZZ);
               }
             }
             fingerIds[pointable.id] = true;
