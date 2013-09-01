@@ -118,8 +118,6 @@
 
       }
 
-      connect();
-
       function initialize() {
         document.getElementById("connect").addEventListener("click", function() {
           var host     = document.getElementById("leaphost").value;
@@ -136,6 +134,9 @@
             options.rotation = parseInt(rotation, 10);
           }
           connect(options);
+        }, false);
+        document.getElementById("connect-default").addEventListener("click", function() {
+          connect();
         }, false);
       }
 
@@ -257,6 +258,7 @@
       <input type="text" id="leapport" placeholder="port (default:6437)" />
       <input type="text" id="rotation" placeholder="degree(0-360) (default:0)" />
       <input type="button" id="connect" value="connect" />
+      <input type="button" id="connect-default" value="connect default" />
     </div>
     <div id="app">
       <div id="scene">
